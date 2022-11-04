@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slow Example</title>
+    <link rel="stylesheet" href="/assets/css/home/home.css">
+    <link rel="stylesheet" href="/assets/css/posts/posts.css">
+
+    <script src="/assets/js/components/default.js"></script>
+    <script src="/assets/js/posts/posts.js"></script>
+    <script src="/assets/js/profile/profile.js"></script>
+</head>
+<body>
+    <header id="header">
+        <div><b onclick="location.href='/'">Slow Example</b></div>
+        <div><span onclick="logout()">Logout</span></div>
+    </header>
+    <section id="content"></section>
+    <nav id="navbar">
+        <ul id="navbar-container">
+            <li class="navbar-items">home</li>
+            <li class="navbar-items" onclick="newpubToggle()">New Post</li>
+            <li class="navbar-items">Profile</li>
+            <li class="navbar-items">Settings</li>
+        </ul>
+    </nav>
+    <div id="newpub" style="display: none;">
+        <form id="newpub-form">
+            <textarea name="text" id="newpub-text" cols="30" rows="10" placeholder="Fala fio! como cê ta?"></textarea>
+            <input type="file" id="newpub-images" hidden>
+            <label for="newpub-images">+ Image</label>
+            <span onclick="newpubToggle()">cancelar</span>
+            <input type="submit" value="Publicar">
+        </form>
+    </div>
+    <footer></footer>
+</body>
+</html>

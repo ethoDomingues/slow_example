@@ -1,0 +1,149 @@
+.posts {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid gray;
+    border-radius: 10px;
+    padding: 10px;
+    min-height: 300px;
+    margin: 10px;
+}
+
+.posts-headers {
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+}
+
+.posts-headers-picture , .posts-headers-picture img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.posts-headers-data {
+    display: flex;
+    flex-direction: column;
+    height: 50px;
+    justify-items: start;
+    text-align: justify;
+    padding-left: 10px;
+}
+
+.posts-content {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    justify-content: flex-end;
+}
+
+.posts-content-pictures {
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.posts-content-pictures img {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+}
+.posts-content-text pre {
+    font-family: Arial, Helvetica, sans-serif;
+}
+.posts-footer {
+    display: flex;
+    padding: 10px;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.posts-footer div {
+    border: 1px solid gray;
+    border-radius: 20px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+
+.shared-posts {
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+.shared-posts div {
+    padding: 10px;
+}
+.shared-posts-404 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.comments {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid gray;
+    border-radius: 10px;
+    padding: 10px;
+    min-height: 200px;
+    margin: 10px;
+}
+
+.comments-headers {
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+}
+
+.comments-headers-picture , .comments-headers-picture img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.comments-headers-data {
+    display: flex;
+    flex-direction: column;
+    height: 50px;
+    justify-items: start;
+    text-align: justify;
+    padding-left: 10px;
+}
+
+.comments-content {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    justify-content: flex-end;
+}
+
+.comments-content-pictures {
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+    max-width: 500px;
+}
+
+.comments-content-pictures img {
+    display: flex;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+.comments-content-text pre {
+    font-family: Arial, Helvetica, sans-serif;
+}
+.comments-footer {
+    display: flex;
+    padding: 10px;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.comments-footer div {
+    border: 1px solid gray;
+    border-radius: 20px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
