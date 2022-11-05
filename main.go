@@ -21,9 +21,12 @@ func main() {
 	app.Get("/login", login)
 	app.Get("/profile", profile)
 
+	// It doesn't work, because a func 'login' has already been registered
+	// app.Get("/register", login)
+
+	app.Mount(auth.Load())
 	app.Mount(cdn.Load())
 	app.Mount(api.Load())
-	app.Mount(auth.Load())
 
 	db := model.GetDB()
 	db.AutoMigrate(
@@ -34,7 +37,7 @@ func main() {
 		&model.Post{},    // 5º
 	)
 
-	app.ShowRoutes() // show all routes
+	app.ShowRoutes() // show all routes (it is not necessary for the app to work)
 	app.Listen()     // start the Listener
 }
 
@@ -62,8 +65,7 @@ func GetCurrentUser(ctx *slow.Ctx) {
 		if ntkn := strings.TrimPrefix(tkn, "Bearer "); ntkn != tkn {
 			if j, ok := slow.ValidJWT(ntkn, ctx.App.SecretKey); ok {
 				if u, ok := j.Payload["sub"]; ok {
-					user, found := model.FindByID(u)
-					if found {
+					if user, found := model.FindByID(u); found {
 						ctx.Global["user"] = user
 						ctx.Global["token"] = j
 						return
@@ -72,8 +74,7 @@ func GetCurrentUser(ctx *slow.Ctx) {
 			} else if j != nil {
 				if _, ok := j.Payload["_permanent"]; ok {
 					if u, ok := j.Payload["sub"]; ok {
-						user, found := model.FindByID(u)
-						if found {
+						if user, found := model.FindByID(u); found {
 							ctx.Global["user"] = user
 							ctx.Global["token"] = j
 							return
@@ -83,8 +84,7 @@ func GetCurrentUser(ctx *slow.Ctx) {
 			}
 		}
 	} else if u, ok := ctx.Session.Get("sub"); ok {
-		user, found := model.FindByID(u)
-		if found {
+		if user, found := model.FindByID(u); found {
 			ctx.Global["user"] = user
 			return
 		}
