@@ -13,8 +13,8 @@ func NewProfile(user, cdn string) *Profile {
 		Active: true,
 	}
 	db := GetDB()
-	var p1 *Profile
-	res := db.Where("owner = ? AND active = ?", user, true).Find(p1)
+	p1 := &Profile{}
+	res := db.Where("owner = ? AND active = true", user).Find(p1)
 	if res.RowsAffected > 0 {
 		p1.Active = false
 		db.Save(p1)
@@ -41,9 +41,8 @@ func (p *Profile) Url(rq *slow.Request) string {
 func (p *Profile) ToJSON(rq *slow.Request) map[string]any {
 	return map[string]any{
 		"id":        p.UID(),
-		"active":    p.Active,
-		"createdAt": p.CreatedAt.UTC().String(),
-		"owner":     p.Owner,
 		"url":       p.Url(rq),
+		"owner":     p.Owner,
+		"createdAt": p.Created(),
 	}
 }

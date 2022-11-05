@@ -95,6 +95,9 @@ func post(ctx *slow.Ctx) {
 		images = nil
 
 	}
+	if (len(images) < 1) || (profile != nil && profile != "true") {
+		profile = nil
+	}
 
 	if slow.TypeOf(_text) == "string" || _text == "" {
 		text = _text.(string)
@@ -111,7 +114,7 @@ func post(ctx *slow.Ctx) {
 	}
 	post := model.CreatePost(text, user.UID(), sharedID, images)
 
-	if profile != nil {
+	if profile == "true" {
 		img := post.GetImages()[0]
 		model.NewProfile(user.UID(), img.UID())
 	}

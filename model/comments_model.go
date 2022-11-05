@@ -72,7 +72,7 @@ func (c *Comm) ToJSON(rq *slow.Request) map[string]any {
 		"post":      c.GetPost().ToJSONbasic(rq),
 		"image":     img,
 		"owner":     c.GetOwner().ToJSON(rq),
-		"createdAt": c.CreatedAt.UTC().String(),
+		"createdAt": c.Created(),
 		"reacts":    reacts,
 	}
 }

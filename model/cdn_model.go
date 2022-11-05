@@ -50,10 +50,8 @@ func (c *Cdn) Query(conds ...any) {
 
 func (c *Cdn) Delete() {
 	db := GetDB()
-	pf, find := FindByID(c.UID())
-	if find {
-		db.Delete(pf)
-	}
+	pf := &Profile{}
+	db.Where("cdn = ?", c.UID()).Delete(pf)
 	db.Delete(c)
 }
 
@@ -65,6 +63,6 @@ func (c *Cdn) ToJSON(rq *slow.Request) map[string]any {
 		"id":        id,
 		"url":       c.Url(rq),
 		"owner":     c.Owner,
-		"createdAt": c.CreatedAt.UTC().String(),
+		"createdAt": c.Created(),
 	}
 }

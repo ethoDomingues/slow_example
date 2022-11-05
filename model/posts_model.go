@@ -96,7 +96,7 @@ func (p *Post) ToJSON(rq *slow.Request) map[string]any {
 			"shared":      nil,
 			"deleted":     true,
 			"comments":    []any{},
-			"createdAt":   p.CreatedAt.UTC().String(),
+			"createdAt":   p.Created(),
 			"sharedCount": p.SharedCount(),
 		}
 	}
@@ -129,17 +129,16 @@ func (p *Post) ToJSON(rq *slow.Request) map[string]any {
 		"shared":      shMap,
 		"deleted":     p.Deleted,
 		"comments":    comms,
-		"createdAt":   p.CreatedAt.UTC().String(),
+		"createdAt":   p.Created(),
 		"sharedCount": p.SharedCount(),
 	}
 }
 
 func (p *Post) ToJSONbasic(rq *slow.Request) map[string]any {
-
 	return map[string]any{
 		"id":        p.UID(),
 		"owner":     p.GetOwner().ToJSON(rq),
-		"createdAt": p.CreatedAt.UTC().String(),
+		"createdAt": p.Created(),
 	}
 }
 

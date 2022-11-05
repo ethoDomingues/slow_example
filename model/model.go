@@ -16,6 +16,13 @@ type Model struct {
 	UpdatedAt time.Time
 }
 
+func (m *Model) Created() string {
+	return m.CreatedAt.Format(time.RFC3339)
+}
+func (m *Model) Updated() string {
+	return m.UpdatedAt.Format(time.RFC3339)
+}
+
 type DB struct {
 	*gorm.DB
 	Tables map[string]any

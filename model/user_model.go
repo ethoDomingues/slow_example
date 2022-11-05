@@ -78,8 +78,8 @@ func (u *User) ToJSON(rq *slow.Request) map[string]any {
 		"id":        u.UID(),
 		"name":      u.Name,
 		"email":     u.Email,
-		"createdAt": u.CreatedAt.UTC().String(),
-		"updateAt":  u.UpdatedAt.UTC().String(),
+		"createdAt": u.Created(),
+		"updateAt":  u.Updated(),
 		"profile":   p,
 	}
 }

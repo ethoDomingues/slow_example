@@ -37,8 +37,8 @@ func main() {
 		&model.Post{},    // 5º
 	)
 
-	app.ShowRoutes() // show all routes (it is not necessary for the app to work)
-	app.Listen()     // start the Listener
+	// app.ShowRoutes() // show all routes (it is not necessary for the app to work)
+	app.Listen() // start the Listener
 }
 
 func home(ctx *slow.Ctx) {

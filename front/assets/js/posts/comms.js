@@ -26,6 +26,10 @@ function pubNewComm(postID) {
                 image.type = "text";
                 image.type = "file";
                 resp.json().then(data => {
+                    let cElement = pElement.getElementsByClassName("comments-content")[0];
+                    if(cElement.style.display == "none"){
+                        cElement.style.display = "flex";
+                    }
                     pElement.getElementsByClassName("comments-content")[0].
                         insertAdjacentHTML("afterbegin",buildComm(data)) 
                 });

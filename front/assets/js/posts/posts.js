@@ -117,6 +117,7 @@ function toggleComments(postID) {
     } else {
         cElement.style.display = "none";
     }
+    return;
 }
 
 function buildPostHeader(p) {
@@ -134,18 +135,16 @@ function buildPostHeader(p) {
         if (!p.deleted && imOwner) {
             del = `<span onclick="deletePost('${p.id}')">Excluir</span>`;
         }
-    } else {
-        console.log(p.id)
     }
 
     return `
     <div class="posts-headers">
         <picture class="posts-headers-picture">
-            <img src="${url}" width="50px" alt="user-profile">
+            <img src="${url}" width="50px" alt="user-profile" class="userProfile-${p.owner.id}">
         </picture>
         <div class="posts-headers-data">
             <span>${p.owner.name}</span>
-            <span><sub>${p.createdAt}</sub></span>
+            <span><sub>${moment(p.createdAt).fromNow()}</sub></span>
         </div>
         ${del}
     </div>`
@@ -193,7 +192,6 @@ function buildPost(p) {
         comms = "<span>100 comentarios...</span>";
     }
 
-
     return `
 <article class="posts" data='${JSON.stringify(p)}' id="${p.id}" >
     ${buildPostHeader(p)}
@@ -224,11 +222,14 @@ function pubNewPost(event) {
     let text = document.getElementById("newpub-text");
     let images = document.getElementById("newpub-images");
     if (text.value || images.files.length>0) {
+        let profile = document.getElementById("newpub-profile")
+
         let user = localStorage.getItem("userID");
         let token = localStorage.getItem("token");
         let fd = new FormData();
 
         fd.set("text", text.value);
+        fd.set("profile", profile.checked);
         Array.from(images.files).forEach((file) => {
             fd.append("images",file)
         });
@@ -246,17 +247,25 @@ function pubNewPost(event) {
                 images.type = "text";
                 images.type = "file";
                 resp.json().then(data => {
+                    if(profile.checked){
+                        console.log("tamo ae")
+                        Array.from(document.getElementsByClassName("userProfile-"+data.owner.id)).
+                        forEach(elem => {
+                            elem.src = data.owner.profile.url;
+                        });
+                    }
                     document.getElementById("content").insertAdjacentHTML("afterbegin",buildPost(data)) 
+                    profile.checked = false;
                 });
             }
         });
     }
+    return;
 }
 
 function sharePost(postID) {
     let userID = localStorage.getItem("userID")
     let token = localStorage.getItem("token")
-    
 
     fetch(`http://api.localhost:5000/v1/users/${userID}/posts`, {
         method:"POST",
@@ -280,4 +289,16 @@ function sharePost(postID) {
             });
         }
     });
+    return;
+}
+
+function toggleInputProfile() {
+    let dElement = document.getElementById("newpub-profile-div");
+    let iElement = document.getElementById("newpub-images");
+    if(iElement.files.length > 0 ){
+        dElement.hidden = false;
+    } else {
+        dElement.hidden = true;
+    }
+    return;
 }

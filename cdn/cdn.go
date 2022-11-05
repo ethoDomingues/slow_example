@@ -21,6 +21,12 @@ var routes = []*slow.Route{
 		Func:    getCdn,
 		Methods: []string{"GET"},
 	},
+	{
+		Name:    "getByid",
+		Url:     "/{id}",
+		Func:    getCdnByID,
+		Methods: []string{"GET"},
+	},
 }
 
 func Load() *slow.Router {
@@ -48,6 +54,14 @@ func getCdn(ctx *slow.Ctx) {
 	filename := ctx.Request.Args["filename"]
 
 	cdn := model.FindOr404(id, "*model.Cdn", "filename = ?", filename).(*model.Cdn)
+	ctx.Response.Headers.Set("Content-Type", cdn.ContentType)
+	ctx.Response.Body.Write(cdn.Blob)
+}
+
+func getCdnByID(ctx *slow.Ctx) {
+	id := ctx.Request.Args["id"]
+
+	cdn := model.FindOr404(id, "*model.Cdn").(*model.Cdn)
 	ctx.Response.Headers.Set("Content-Type", cdn.ContentType)
 	ctx.Response.Body.Write(cdn.Blob)
 }

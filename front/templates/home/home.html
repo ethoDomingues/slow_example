@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/assets/css/home/home.css">
     <link rel="stylesheet" href="/assets/css/posts/posts.css">
 
+    <script src="/assets/js/moment.js"></script>
     <script src="/assets/js/home/home.js"></script>
     <script src="/assets/js/posts/posts.js"></script>
     <script src="/assets/js/posts/comms.js"></script>
@@ -31,12 +32,20 @@
         <form id="newpub-form">
             <textarea name="text" id="newpub-text" cols="30" rows="10" placeholder="Fala fio! como cê ta?"></textarea>
             <input type="file" id="newpub-images" hidden multiple>
-            <label for="newpub-images">+ Image</label>
-            <span onclick="newpubToggle()">cancelar</span>
+            <label for="newpub-images" onchange="toggleInputProfile()">+ Image</label>
+            <div id="newpub-profile-div" hidden>
+                <input type="checkbox" name="profile" id="newpub-profile">
+                <label for="newpub-profile" id="newpub-profile-label">tornar foto como perfil</label>
+            </div>
+                <span onclick="newpubToggle()">cancelar</span>
             <input type="submit" value="Publicar">
         </form>
     </div>
     <div id="viewer" style="display: none;"></div>
     <footer></footer>
+    <script>
+        document.getElementById("newpub-images").
+            addEventListener("change",toggleInputProfile, false)
+    </script>
 </body>
 </html>

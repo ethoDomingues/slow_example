@@ -40,7 +40,7 @@ func (r *React) ToJson() map[string]any {
 		"id":        r.UID(),
 		"obj":       r.Obj,
 		"owner":     r.Owner,
-		"createdAt": r.CreatedAt.UTC().String(),
+		"createdAt": r.Created(),
 	}
 }
 
