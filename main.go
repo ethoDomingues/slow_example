@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/ethodomingues/slow"
@@ -62,7 +61,6 @@ func GetCurrentUser(ctx *slow.Ctx) {
 	} else if tkn := rq.Raw.Header.Get("Authorization"); tkn != "" {
 		if ntkn := strings.TrimPrefix(tkn, "Bearer "); ntkn != tkn {
 			if j, ok := slow.ValidJWT(ntkn, ctx.App.SecretKey); ok {
-				fmt.Println(ntkn)
 				if u, ok := j.Payload["sub"]; ok {
 					user, found := model.FindByID(u)
 					if found {
@@ -91,6 +89,5 @@ func GetCurrentUser(ctx *slow.Ctx) {
 			return
 		}
 	}
-	delete(ctx.Global, "user")
 	return
 }
