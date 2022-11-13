@@ -4,8 +4,6 @@ go 1.19
 
 replace github.com/ethodomingues/slow_example => ../
 
-replace github.com/ethodomingues/slow => ../../slow
-
 replace github.com/ethodomingues/slow_example/auth => ../auth
 
 replace github.com/ethodomingues/slow_example/api => ../api
