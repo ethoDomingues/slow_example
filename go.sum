@@ -1,3 +1,11 @@
+github.com/ethodomingues/slow v0.0.0-20221105170026-0e099cdf7ddf h1:IuQfaPMR2LC9cNbO0mtWxNNdVGzdONVd+YaqXdO3vyw=
+github.com/ethodomingues/slow v0.0.0-20221105170026-0e099cdf7ddf/go.mod h1:oCUIAXUEXyHaT9wAwx/DlMLQar3W1wVKqhYWIdjmp2g=
+github.com/ethodomingues/slow_example/api v0.0.0-20221113000051-61c7f70088e4 h1:iRm0/imcQ6pPNUs31Or9Bnjo9KbOgkzYmtDJp9o7k7I=
+github.com/ethodomingues/slow_example/api v0.0.0-20221113000051-61c7f70088e4/go.mod h1:cxgLA8kZq0dpKecPDeb5qmPWzW9CpTrOfUCsdSbTzGk=
+github.com/ethodomingues/slow_example/auth v0.0.0-20221113000051-61c7f70088e4 h1:9SIFDk71TmAi5I0ECT9VFjXSDw1hQdg8jrJF6tr+PlI=
+github.com/ethodomingues/slow_example/auth v0.0.0-20221113000051-61c7f70088e4/go.mod h1:scWCYJsIUEamHjtWB390vzu/L1OfBS/6l+BrHnH+opc=
+github.com/ethodomingues/slow_example/cdn v0.0.0-20221113000051-61c7f70088e4 h1:wPhS4YUnKOVGUC5io7q52s/sgAYNRfIDU00nqRYbCOE=
+github.com/ethodomingues/slow_example/cdn v0.0.0-20221113000051-61c7f70088e4/go.mod h1:VzhNYQL9ALcnblw0ATOgfhADDtZH6GySsF9UhK4tUaQ=
 github.com/jinzhu/inflection v1.0.0 h1:K317FqzuhWc8YvSVlFMCCUb36O/S9MCKRDI7QkRKD/E=
 github.com/jinzhu/inflection v1.0.0/go.mod h1:h+uFLlag+Qp1Va5pdKtLDYj+kHp5pxUVkryuEj+Srlc=
 github.com/jinzhu/now v1.1.4/go.mod h1:d3SSVoowX0Lcu0IBviAWJpolVfI5UJVZZ7cO71lE/z8=
@@ -7,6 +15,8 @@ github.com/mattn/go-sqlite3 v1.14.15 h1:vfoHhTN1af61xCRSWzFIWzx2YskyMTwHLrExkBOj
 github.com/mattn/go-sqlite3 v1.14.15/go.mod h1:2eHXhiwb8IkHr+BDWZGa96P6+rkvnG63S2DGjv9HUNg=
 golang.org/x/crypto v0.1.0 h1:MDRAIl0xIo9Io2xV565hzXHw3zVseKrJKodhohM5CjU=
 golang.org/x/crypto v0.1.0/go.mod h1:RecgLatLF4+eUMCP1PoPZQb+cVrJcOPbHkTkbkB9sbw=
+golang.org/x/exp v0.0.0-20221031165847-c99f073a8326 h1:QfTh0HpN6hlw6D3vu8DAwC8pBIwikq0AI1evdm+FksE=
+golang.org/x/exp v0.0.0-20221031165847-c99f073a8326/go.mod h1:CxIveKay+FTh1D0yPZemJVgC/95VzuuOLq5Qi4xnoYc=
 gorm.io/driver/sqlite v1.4.3 h1:HBBcZSDnWi5BW3B3rwvVTc510KGkBkexlOg0QrmLUuU=
 gorm.io/driver/sqlite v1.4.3/go.mod h1:0Aq3iPO+v9ZKbcdiz8gLWRw5VOPcBOPUQJFLq5e2ecI=
 gorm.io/gorm v1.24.0 h1:j/CoiSm6xpRpmzbFJsQHYj+I8bGYWLXVHeYEyyKlF74=
