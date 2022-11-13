@@ -11,4 +11,4 @@ $ cd slow_example/
 $ go run .
 ```
 
-[def]: https://github.com/ethoDomingues/slow_example
+[def]: https://github.com/ethoDomingues/slow
