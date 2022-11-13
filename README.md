@@ -5,7 +5,7 @@
 ## [Slow Repo e 'doc' ][def]
 
 ```sh
-$ go get github.com/ethoDomingues/slow
+$ git clone https://github.com/ethoDomingues/slow.git
 $ git clone https://github.com/ethoDomingues/slow_example.git
 $ cd slow_example/
 $ go run .
