@@ -7,6 +7,7 @@ import (
 	"github.com/ethodomingues/slow_example/api"
 	"github.com/ethodomingues/slow_example/auth"
 	"github.com/ethodomingues/slow_example/cdn"
+	"github.com/ethodomingues/slow_example/dynamic"
 	"github.com/ethodomingues/slow_example/model"
 )
 
@@ -27,6 +28,7 @@ func main() {
 	app.Mount(auth.Load())
 	app.Mount(cdn.Load())
 	app.Mount(api.Load())
+	app.Mount(dynamic.Load())
 
 	db := model.GetDB()
 	db.AutoMigrate(
