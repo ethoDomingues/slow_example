@@ -40,7 +40,7 @@ type Cdn struct {
 }
 
 func (c *Cdn) Url(rq *slow.Request) string {
-	return rq.UrlFor("cdn.get", true, map[string]string{"id": c.UID(), "filename": c.Filename})
+	return slow.UrlFor("cdn.get", true, map[string]string{"id": c.UID(), "filename": c.Filename})
 }
 
 func (c *Cdn) Query(conds ...any) {

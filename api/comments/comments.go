@@ -12,7 +12,7 @@ var Routes = []*slow.Route{
 	{
 		Url:  "/users/{userID}/posts/{postID}/comments",
 		Name: "setComent",
-		Ctrl: slow.Ctrl{
+		MapCtrl: slow.MapCtrl{
 			"POST": {Func: auth.Manager(post, true)},
 		},
 	},
@@ -20,7 +20,7 @@ var Routes = []*slow.Route{
 		Url:         "/users/{userID}/posts/{postID}/comments/{commID}",
 		Name:        "getComent",
 		Middlewares: slow.NewMiddleware(auth.Required),
-		Ctrl: slow.Ctrl{
+		MapCtrl: slow.MapCtrl{
 			"GET":    {Func: get},
 			"PUT":    {Func: get},
 			"DELETE": {Func: auth.Manager(delete, true)},
@@ -43,7 +43,7 @@ func get(ctx *slow.Ctx) {
 	rsp.NotFound()
 }
 
-func put(ctx *slow.Ctx) {}
+// func put(ctx *slow.Ctx) {}
 
 func post(ctx *slow.Ctx) {
 

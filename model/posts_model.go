@@ -26,6 +26,7 @@ func CreatePost(text, owner string, shared string, images []*slow.File) *Post {
 	}
 	p.Images = cdnIds.String()
 	db.Save(p)
+	fmt.Println(p.Images)
 	return p
 }
 

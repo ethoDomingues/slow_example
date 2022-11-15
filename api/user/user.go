@@ -39,7 +39,7 @@ func whoami(ctx *slow.Ctx) {
 				"token": tkn,
 			}, 200)
 	}
-	ctx.Response.Redirect(ctx.App.UrlFor("auth.login", true, nil))
+	ctx.Response.Redirect(slow.UrlFor("auth.login", true, nil))
 }
 
 func getUser(ctx *slow.Ctx) {

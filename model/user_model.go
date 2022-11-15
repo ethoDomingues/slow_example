@@ -10,11 +10,18 @@ import (
 
 func NewUser(data map[string]any, prof *slow.File) (*User, error) {
 	email, ok := data["email"].(string)
-	name, ok := data["name"].(string)
-	password, ok := data["password"].(string)
-
 	if !ok {
-		return nil, errors.New("Bad Request")
+		return nil, errors.New("bad request")
+	}
+
+	name, ok := data["name"].(string)
+	if !ok {
+		return nil, errors.New("bad request")
+	}
+
+	password, ok := data["password"].(string)
+	if !ok {
+		return nil, errors.New("bad request")
 	}
 
 	u := &User{}

@@ -6,8 +6,6 @@ import (
 	"github.com/ethodomingues/slow"
 )
 
-var secret = []byte("uma chave secreta")
-
 func Manager(f slow.Func, withCred bool) slow.Func {
 	return func(ctx *slow.Ctx) {
 		if withCred {
@@ -34,7 +32,6 @@ func Required(ctx *slow.Ctx) {
 
 	n := base64.RawURLEncoding.EncodeToString([]byte(rq.RequestURL()))
 	rsp.Redirect(
-		rq.UrlFor("auth.login", true, map[string]string{
-			"next": n}),
+		slow.UrlFor("auth.login", true, map[string]string{"next": n}),
 	)
 }

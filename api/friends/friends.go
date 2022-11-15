@@ -10,7 +10,7 @@ var Routes = []*slow.Route{
 	{
 		Name: "friends",
 		Url:  "/friends",
-		Ctrl: slow.Ctrl{
+		MapCtrl: slow.MapCtrl{
 			"PUT": {Func: auth.Manager(put, true)},
 		},
 	},

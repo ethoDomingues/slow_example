@@ -60,7 +60,6 @@ func getCdn(ctx *slow.Ctx) {
 
 func getCdnByID(ctx *slow.Ctx) {
 	id := ctx.Request.Args["id"]
-
 	cdn := model.FindOr404(id, "*model.Cdn").(*model.Cdn)
 	ctx.Response.Headers.Set("Content-Type", cdn.ContentType)
 	ctx.Response.Body.Write(cdn.Blob)

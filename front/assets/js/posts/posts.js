@@ -31,15 +31,12 @@ function deletePost(postID) {
                 Authorization:token,
             }
         }).then(resp =>{
-            if (resp.status == 200 ||resp.status == 204) {
-                console.log(postID)
-                Array.from(document.getElementsByClassName(`shared-${postID}`)).
+            if (resp.status == 200 || resp.status == 204) {
+                Array.from(document.getElementsByClassName(`posts-shared-content-${postID}`)).
                 forEach(elem => {
                     elem.innerHTML = `
                     <div>
-                        <div>
-                            <b>O Conteudo Já Não Está Mais Disponível<b>
-                        </div>
+                        <b>O Conteudo Já Não Está Mais Disponível<b>
                     </div>`;
                 })
                 pElement.remove();
@@ -153,39 +150,45 @@ function buildPostHeader(p) {
 function buildPostContent(p) {
     if (p.deleted) {
         return `
-        <div class="shared-posts-404">
-            <b>O Conteudo Já Não Está Mais Disponível</b>
+        <div class="posts-content">
+            <div class="shared-posts-404">
+                <b>O Conteudo Já Não Está Mais Disponível</b>
+            </div>
         </div>`;
     }
     let content = ''
     if (p.shared != null) {
         content = `
+        <div class="posts-content posts-shared-content-${p.id}">
             <div class="posts-content-text">
                 <pre>${p.text}</pre>
             </div>
             <div class="shared-${p.shared.id} shared-posts">
                 ${buildPostHeader(p.shared)}
                 ${buildPostContent(p.shared)}
-            </div>`;
+            </div>
+        </div>`;
     } else {
         let images = "";
         p.images.forEach((img)=>{
             images += `
             <picture class="posts-content-pictures">
-                    <img src="${img.url}" alt="user-profile">
+                <img src="${img.url}" alt="uma imagem">
             </picture>`;
         });
         content = `
             <div class="posts-content-text">
                 <pre>${p.text}</pre>
             </div>
-            <div>${images}</div>`;
+            <div class="posts-content-images">
+                ${images}
+            </div>`;
     }
     return content;
 }
 
 function buildPost(p) {
-
+    
     let comms = "";
     p.comments.forEach(comm => { comms += buildComm(comm);});
     if (comms == "") {

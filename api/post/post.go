@@ -11,7 +11,7 @@ var Routes = []*slow.Route{
 		Url:  "/posts",
 		Name: "getAllPost",
 		Func: post,
-		Ctrl: slow.Ctrl{
+		MapCtrl: slow.MapCtrl{
 			"get": {Func: getAll},
 		},
 	},
@@ -19,7 +19,7 @@ var Routes = []*slow.Route{
 		Url:  "/users/{userID}/posts",
 		Name: "setPost",
 		Func: post,
-		Ctrl: slow.Ctrl{
+		MapCtrl: slow.MapCtrl{
 			"post": {Func: auth.Manager(post, true)},
 			"get":  {Func: getUserPosts},
 		},
@@ -28,7 +28,7 @@ var Routes = []*slow.Route{
 		Url:  "/users/{userID}/posts/{postID}",
 		Name: "post",
 		Func: get,
-		Ctrl: slow.Ctrl{
+		MapCtrl: slow.MapCtrl{
 			"get":    {Func: get},
 			"delete": {Func: auth.Manager(delete, true)},
 		},
@@ -89,11 +89,11 @@ func post(ctx *slow.Ctx) {
 	shared := rq.Form["shared"]
 	profile := rq.Form["profile"]
 	images := rq.Files["images"]
+
 	if sh, ok := shared.(string); ok {
 		pShared = model.FindOr404(sh, "*model.Post").(*model.Post)
 		profile = nil
 		images = nil
-
 	}
 	if (len(images) < 1) || (profile != nil && profile != "true") {
 		profile = nil
@@ -122,7 +122,7 @@ func post(ctx *slow.Ctx) {
 }
 
 // TODO: implemetar içaqi
-func put(ctx *slow.Ctx) {}
+// func put(ctx *slow.Ctx) {}
 
 func delete(ctx *slow.Ctx) {
 	rq := ctx.Request

@@ -1,11 +1,16 @@
 package model
 
-import "github.com/ethodomingues/slow"
+import (
+	"fmt"
+
+	"github.com/ethodomingues/slow"
+)
 
 func Newfriends(rec, req string) *Friends {
 	db := GetDB()
 	if res := db.Model(&Solicitation{}).Find(""); res.RowsAffected < 1 {
 		if res := db.Model(&Solicitation{}).Find(""); res.RowsAffected < 1 {
+			fmt.Println("")
 		}
 	}
 	f := &Friends{
