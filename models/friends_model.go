@@ -1,18 +1,15 @@
-package model
+package models
 
 import (
-	"fmt"
-
 	"github.com/ethodomingues/slow"
 )
 
 func Newfriends(rec, req string) *Friends {
-	db := GetDB()
-	if res := db.Model(&Solicitation{}).Find(""); res.RowsAffected < 1 {
-		if res := db.Model(&Solicitation{}).Find(""); res.RowsAffected < 1 {
-			fmt.Println("")
-		}
-	}
+	// db := Session()
+	// if res := db.Model(&Solicitation{}).Find(""); res.RowsAffected < 1 {
+	// 	if res := db.Model(&Solicitation{}).Find(""); res.RowsAffected < 1 {
+	// 	}
+	// }
 	f := &Friends{
 		Req: req,
 		Rec: rec,
@@ -31,7 +28,7 @@ func (f *Friends) Delete() {}
 func (f *Friends) GetAllFor(user string) []*User {
 	friends := []*Friends{}
 
-	db := GetDB()
+	db := Session()
 	db.Where("Rec = ? AND Req = ?", user).Find(&friends)
 
 	users := []*User{}
@@ -51,12 +48,12 @@ func (f *Friends) GetAllFor(user string) []*User {
 
 type SliceUser []*User
 
-func (su *SliceUser) ToJSON(rq *slow.Request) map[string]any {
+func (su *SliceUser) ToMap(rq *slow.Request) map[string]any {
 	users := []map[string]any{}
 	ids := []string{}
 	for _, u := range *su {
-		ids = append(ids, u.UID())
-		users = append(users, u.ToJSON(rq))
+		ids = append(ids, u.UID)
+		users = append(users, u.ToMap(rq))
 	}
 	return map[string]any{
 		"users": users,

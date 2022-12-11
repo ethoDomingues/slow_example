@@ -1,4 +1,4 @@
-package model
+package models
 
 import (
 	"fmt"
@@ -25,7 +25,7 @@ func NewCdn(owner string, f *slow.File) *Cdn {
 
 func CreateCdn(f *slow.File, owner string) *Cdn {
 	cdn := NewCdn(owner, f)
-	db := GetDB()
+	db := Session()
 	db.Create(cdn)
 	return cdn
 }
@@ -40,16 +40,20 @@ type Cdn struct {
 }
 
 func (c *Cdn) Url(rq *slow.Request) string {
-	return slow.UrlFor("cdn.get", true, map[string]string{"id": c.UID(), "filename": c.Filename})
+	return rq.UrlFor(
+		"cdn.get", true,
+		"id", c.UID(),
+		"filename", c.Filename,
+	)
 }
 
 func (c *Cdn) Query(conds ...any) {
-	db := GetDB()
+	db := Session()
 	db.Find(c, conds...)
 }
 
 func (c *Cdn) Delete() {
-	db := GetDB()
+	db := Session()
 	pf := &Profile{}
 	db.Where("cdn = ?", c.UID()).Delete(pf)
 	db.Delete(c)
@@ -57,7 +61,7 @@ func (c *Cdn) Delete() {
 
 func (c *Cdn) UID() string { return "cdns@" + fmt.Sprint(c.ID) }
 
-func (c *Cdn) ToJSON(rq *slow.Request) map[string]any {
+func (c *Cdn) ToMap(rq *slow.Request) map[string]any {
 	id := c.UID()
 	return map[string]any{
 		"id":        id,

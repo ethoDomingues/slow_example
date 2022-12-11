@@ -1,4 +1,4 @@
-package model
+package models
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ func NewReact(objID, owner string) (*React, bool) {
 	var deleted bool
 	var react = &React{}
 
-	db := GetDB()
+	db := Session()
 	_, found := FindByID(objID)
 	if !found {
 		return nil, false
@@ -35,7 +35,7 @@ type React struct {
 	Owner string
 }
 
-func (r *React) ToJson() map[string]any {
+func (r *React) ToMap() map[string]any {
 	return map[string]any{
 		"id":        r.UID(),
 		"obj":       r.Obj,
@@ -45,7 +45,7 @@ func (r *React) ToJson() map[string]any {
 }
 
 func (r *React) Delete() {
-	db := GetDB()
+	db := Session()
 	db.Delete(r)
 }
 

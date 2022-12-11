@@ -1,9 +1,9 @@
 package friends
 
 import (
+	"github.com/ethodomingues/authAPI"
 	"github.com/ethodomingues/slow"
-	"github.com/ethodomingues/slow_example/auth"
-	"github.com/ethodomingues/slow_example/model"
+	"github.com/ethodomingues/slow_example/models"
 )
 
 var Routes = []*slow.Route{
@@ -11,27 +11,29 @@ var Routes = []*slow.Route{
 		Name: "friends",
 		Url:  "/friends",
 		MapCtrl: slow.MapCtrl{
-			"PUT": {Func: auth.Manager(put, true)},
+			"PUT": {Func: put},
 		},
 	},
 }
 
 func put(ctx *slow.Ctx) {
+	authAPI.Required(ctx)
+
 	rq := ctx.Request
 	rsp := ctx.Response
 
-	user := ctx.Global["user"].(*model.User)
+	user := ctx.Global["user"].(*models.User)
 	userRec, ok := rq.Form["user"].(string)
 
 	if !ok || userRec == "" {
 		rsp.BadRequest()
 	}
 
-	f := model.Friends{
-		Req: user.UID(),
+	f := models.Friends{
+		Req: user.UID,
 		Rec: userRec,
 	}
-	db := model.GetDB()
+	db := models.Session()
 	db.Create(f)
 
 }

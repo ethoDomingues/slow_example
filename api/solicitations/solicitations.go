@@ -1,9 +1,9 @@
 package solicitations
 
 import (
+	"github.com/ethodomingues/authAPI"
 	"github.com/ethodomingues/slow"
-	"github.com/ethodomingues/slow_example/auth"
-	"github.com/ethodomingues/slow_example/model"
+	"github.com/ethodomingues/slow_example/models"
 )
 
 var Routes = []*slow.Route{
@@ -11,21 +11,23 @@ var Routes = []*slow.Route{
 		Url:     "/users/{userID}/solicitations",
 		Name:    "setSol",
 		Methods: []string{"GET", "POST"},
-		Func:    auth.Manager(get, true),
+		Func:    get,
 	},
 }
 
 func get(ctx *slow.Ctx) {
+	authAPI.Required(ctx)
+
 	rq := ctx.Request
 	rsp := ctx.Response
 
-	user := ctx.Global["user"].(*model.User)
+	user := ctx.Global["user"].(*models.User)
 	userID := rq.Args["userID"]
-	if userID != user.UID() {
+	if userID != user.UID {
 		rsp.Unauthorized()
 	}
-	sols := []*model.Solicitation{}
-	model.GetDB().Where("rec = ? AND req = ?", userID, userID).Find(sols)
-	slSol := model.SliceSol(sols)
-	rsp.JSON(slSol.ToJSON(userID, rq), 200)
+	sols := []*models.Solicitation{}
+	models.Session().Where("rec = ? AND req = ?", userID, userID).Find(sols)
+	slSol := models.SliceSol(sols)
+	rsp.JSON(slSol.ToMap(userID, rq), 200)
 }

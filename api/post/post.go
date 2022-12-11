@@ -1,9 +1,9 @@
 package post
 
 import (
+	"github.com/ethodomingues/authAPI"
 	"github.com/ethodomingues/slow"
-	"github.com/ethodomingues/slow_example/auth"
-	"github.com/ethodomingues/slow_example/model"
+	"github.com/ethodomingues/slow_example/models"
 )
 
 var Routes = []*slow.Route{
@@ -20,7 +20,7 @@ var Routes = []*slow.Route{
 		Name: "setPost",
 		Func: post,
 		MapCtrl: slow.MapCtrl{
-			"post": {Func: auth.Manager(post, true)},
+			"post": {Func: post},
 			"get":  {Func: getUserPosts},
 		},
 	},
@@ -30,7 +30,7 @@ var Routes = []*slow.Route{
 		Func: get,
 		MapCtrl: slow.MapCtrl{
 			"get":    {Func: get},
-			"delete": {Func: auth.Manager(delete, true)},
+			"delete": {Func: delete},
 		},
 	},
 }
@@ -42,56 +42,58 @@ func get(ctx *slow.Ctx) {
 	postID := ctx.Request.Args["postID"]
 	userID := rq.Args["userID"]
 
-	p, found := model.FindByID(postID, "owner = ? AND deleted = false", userID)
-	if post, ok := p.(*model.Post); found && ok {
-		rsp.JSON(post.ToJSON(rq), 200)
+	p, found := models.FindByID(postID, "owner = ? AND deleted = false", userID)
+	if post, ok := p.(*models.Post); found && ok {
+		rsp.JSON(post.ToMap(rq), 200)
 	}
 	rsp.NotFound()
 }
 
 func getUserPosts(ctx *slow.Ctx) {
 	userID := ctx.Request.Args["userID"]
-	model.FindOr404(userID, "*model.User")
+	models.FindOr404(userID, "*models.User")
 
-	var posts = []*model.Post{}
+	var posts = []*models.Post{}
 
-	model.GetDB().Where("owner = ? AND deleted = false", userID).Find(&posts)
+	models.Session().Where("owner = ? AND deleted = false", userID).Find(&posts)
 	ps := []map[string]any{}
 	for _, p := range posts {
-		ps = append(ps, p.ToJSON(ctx.Request))
+		ps = append(ps, p.ToMap(ctx.Request))
 	}
 	ctx.Response.JSON(ps, 200)
 }
 
 func getAll(ctx *slow.Ctx) {
-	posts := []*model.Post{}
-	model.GetDB().Where("deleted = false").Order("id DESC").Find(&posts)
+	posts := []*models.Post{}
+	models.Session().Where("deleted = false").Order("id DESC").Find(&posts)
 	js := []any{}
 	for i := 0; i < len(posts); i++ {
-		js = append(js, posts[i].ToJSON(ctx.Request))
+		js = append(js, posts[i].ToMap(ctx.Request))
 	}
 	ctx.Response.JSON(js, 200)
 }
 
 func post(ctx *slow.Ctx) {
+	authAPI.Required(ctx)
+
 	rq := ctx.Request
 	rsp := ctx.Response
 
-	user := ctx.Global["user"].(*model.User)
+	user := ctx.Global["user"].(*models.User)
 
-	if rq.Args["userID"] != user.UID() {
+	if rq.Args["userID"] != user.UID {
 		rsp.BadRequest()
 	}
 
 	var text string
-	var pShared *model.Post
+	var pShared *models.Post
 	_text := rq.Form["text"]
 	shared := rq.Form["shared"]
 	profile := rq.Form["profile"]
 	images := rq.Files["images"]
 
 	if sh, ok := shared.(string); ok {
-		pShared = model.FindOr404(sh, "*model.Post").(*model.Post)
+		pShared = models.FindOr404(sh, "*models.Post").(*models.Post)
 		profile = nil
 		images = nil
 	}
@@ -112,29 +114,30 @@ func post(ctx *slow.Ctx) {
 			sharedID = pShared.Shared
 		}
 	}
-	post := model.CreatePost(text, user.UID(), sharedID, images)
+	post := models.CreatePost(text, user.UID, sharedID, images)
 
 	if profile == "true" {
 		img := post.GetImages()[0]
-		model.NewProfile(user.UID(), img.UID())
+		models.NewProfile(user.UID, img.UID())
 	}
-	rsp.JSON(post.ToJSON(rq), 201)
+	rsp.JSON(post.ToMap(rq), 201)
 }
 
 // TODO: implemetar içaqi
 // func put(ctx *slow.Ctx) {}
 
 func delete(ctx *slow.Ctx) {
+	authAPI.Required(ctx)
 	rq := ctx.Request
 	rsp := ctx.Response
 
-	user := ctx.Global["user"].(*model.User)
-	if rq.Args["userID"] != user.UID() {
+	user := ctx.Global["user"].(*models.User)
+	if rq.Args["userID"] != user.UID {
 		rsp.BadRequest()
 	}
 
 	id := rq.Args["postID"]
-	post := model.FindOr404(id, "*model.Post", "owner = ?", user.UID())
-	post.(*model.Post).Delete()
+	post := models.FindOr404(id, "*models.Post", "owner = ?", user.UID)
+	post.(*models.Post).Delete()
 	rsp.StatusCode = 204
 }

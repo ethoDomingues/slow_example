@@ -3,16 +3,16 @@ package cdn
 import (
 	"fmt"
 
+	"github.com/ethodomingues/authAPI"
 	"github.com/ethodomingues/slow"
-	"github.com/ethodomingues/slow_example/auth"
-	"github.com/ethodomingues/slow_example/model"
+	"github.com/ethodomingues/slow_example/models"
 )
 
 var routes = []*slow.Route{
 	{
 		Name:    "set",
 		Url:     "/",
-		Func:    auth.Manager(setCdn, true),
+		Func:    setCdn,
 		Methods: []string{"POST", "PUT"},
 	},
 	{
@@ -43,9 +43,10 @@ func Load() *slow.Router {
 }
 
 func setCdn(ctx *slow.Ctx) {
-	u := ctx.Global["user"].(*model.User)
+	authAPI.Required(ctx)
+	u := ctx.Global["user"].(*models.User)
 	f := ctx.Request.Files["images"][0]
-	cdn := model.CreateCdn(f, fmt.Sprint(u.ID))
+	cdn := models.CreateCdn(f, fmt.Sprint(u.ID))
 	ctx.Response.JSON(map[string]int{"id": cdn.ID}, 201)
 }
 
@@ -53,14 +54,14 @@ func getCdn(ctx *slow.Ctx) {
 	id := ctx.Request.Args["id"]
 	filename := ctx.Request.Args["filename"]
 
-	cdn := model.FindOr404(id, "*model.Cdn", "filename = ?", filename).(*model.Cdn)
+	cdn := models.FindOr404(id, "*models.Cdn", "filename = ?", filename).(*models.Cdn)
 	ctx.Response.Headers.Set("Content-Type", cdn.ContentType)
 	ctx.Response.Body.Write(cdn.Blob)
 }
 
 func getCdnByID(ctx *slow.Ctx) {
 	id := ctx.Request.Args["id"]
-	cdn := model.FindOr404(id, "*model.Cdn").(*model.Cdn)
+	cdn := models.FindOr404(id, "*models.Cdn").(*models.Cdn)
 	ctx.Response.Headers.Set("Content-Type", cdn.ContentType)
 	ctx.Response.Body.Write(cdn.Blob)
 }

@@ -1,4 +1,4 @@
-package model
+package models
 
 import (
 	"fmt"
@@ -14,7 +14,7 @@ func CreatePost(text, owner string, shared string, images []*slow.File) *Post {
 		Shared: shared,
 	}
 
-	db := GetDB()
+	db := Session()
 	db.Create(p)
 	var cdnIds strings.Builder
 	for i, img := range images {
@@ -26,7 +26,6 @@ func CreatePost(text, owner string, shared string, images []*slow.File) *Post {
 	}
 	p.Images = cdnIds.String()
 	db.Save(p)
-	fmt.Println(p.Images)
 	return p
 }
 
@@ -70,28 +69,28 @@ func (p *Post) GetImages() []*Cdn {
 
 func (p *Post) GetReact() []*React {
 	reacts := []*React{}
-	GetDB().Where("Obj = ?", p.UID()).Order("id DESC").Find(&reacts)
+	Session().Where("Obj = ?", p.UID()).Order("id DESC").Find(&reacts)
 	return reacts
 }
 
 func (p *Post) GetComm() []*Comm {
 	comms := []*Comm{}
-	GetDB().Where("Post = ?", p.UID()).Order("id DESC").Find(&comms)
+	Session().Where("Post = ?", p.UID()).Order("id DESC").Find(&comms)
 	return comms
 }
 
 func (p *Post) SharedCount() int {
 	var count int64
-	GetDB().Model(&Post{}).Where("shared = ?", p.UID()).Count(&count)
+	Session().Model(&Post{}).Where("shared = ?", p.UID()).Count(&count)
 	return int(count)
 }
 
-func (p *Post) ToJSON(rq *slow.Request) map[string]any {
+func (p *Post) ToMap(rq *slow.Request) map[string]any {
 	if p.Deleted {
 		return map[string]any{
 			"id":          p.UID(),
 			"text":        "",
-			"owner":       p.GetOwner().ToJSON(rq),
+			"owner":       p.GetOwner().ToMap(rq),
 			"images":      []any{},
 			"reacts":      []any{},
 			"shared":      nil,
@@ -103,28 +102,28 @@ func (p *Post) ToJSON(rq *slow.Request) map[string]any {
 	}
 	imgs := []map[string]any{}
 	for _, img := range p.GetImages() {
-		imgs = append(imgs, img.ToJSON(rq))
+		imgs = append(imgs, img.ToMap(rq))
 	}
 
 	comms := []map[string]any{}
 	for _, comm := range p.GetComm() {
-		comms = append(comms, comm.ToJSON(rq))
+		comms = append(comms, comm.ToMap(rq))
 	}
 
 	rs := p.GetReact()
 	reacts := []map[string]any{}
 	for _, r := range rs {
-		reacts = append(reacts, r.ToJson())
+		reacts = append(reacts, r.ToMap())
 	}
 	var shMap map[string]any
 	sh := p.GetShared()
 	if sh != nil {
-		shMap = sh.ToJSON(rq)
+		shMap = sh.ToMap(rq)
 	}
 	return map[string]any{
 		"id":          p.UID(),
 		"text":        p.Text,
-		"owner":       p.GetOwner().ToJSON(rq),
+		"owner":       p.GetOwner().ToMap(rq),
 		"images":      imgs,
 		"reacts":      reacts,
 		"shared":      shMap,
@@ -138,7 +137,7 @@ func (p *Post) ToJSON(rq *slow.Request) map[string]any {
 func (p *Post) ToJSONbasic(rq *slow.Request) map[string]any {
 	return map[string]any{
 		"id":        p.UID(),
-		"owner":     p.GetOwner().ToJSON(rq),
+		"owner":     p.GetOwner().ToMap(rq),
 		"createdAt": p.Created(),
 	}
 }
@@ -160,5 +159,5 @@ func (p *Post) Delete() {
 	p.Images = ""
 	p.Shared = ""
 	p.Deleted = true
-	GetDB().Save(p)
+	Session().Save(p)
 }

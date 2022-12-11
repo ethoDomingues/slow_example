@@ -1,4 +1,4 @@
-package model
+package models
 
 import (
 	"fmt"
@@ -12,7 +12,7 @@ func NewProfile(user, cdn string) *Profile {
 		Cdn:    cdn,
 		Active: true,
 	}
-	db := GetDB()
+	db := Session()
 	p1 := &Profile{}
 	res := db.Where("owner = ? AND active = true", user).Find(p1)
 	if res.RowsAffected > 0 {
@@ -38,7 +38,7 @@ func (p *Profile) Url(rq *slow.Request) string {
 	return cdn.Url(rq)
 }
 
-func (p *Profile) ToJSON(rq *slow.Request) map[string]any {
+func (p *Profile) ToMap(rq *slow.Request) map[string]any {
 	return map[string]any{
 		"id":        p.UID(),
 		"url":       p.Url(rq),

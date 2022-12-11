@@ -1,9 +1,9 @@
 package react
 
 import (
+	"github.com/ethodomingues/authAPI"
 	"github.com/ethodomingues/slow"
-	"github.com/ethodomingues/slow_example/auth"
-	"github.com/ethodomingues/slow_example/model"
+	"github.com/ethodomingues/slow_example/models"
 )
 
 var Routes = []*slow.Route{
@@ -11,63 +11,66 @@ var Routes = []*slow.Route{
 		Url:     "/users/{userID}/posts/{postID}/reacts",
 		Name:    "reactPost",
 		Methods: []string{"GET", "PUT"},
-		Func:    auth.Manager(reactPost, true),
+		Func:    reactPost,
 	},
 	{
 		Url:     "/users/{userID}/posts/{postID}/comments/{commID}/reacts",
 		Name:    "reactComment",
 		Methods: []string{"GET", "PUT"},
-		Func:    auth.Manager(reactComment, true),
+		Func:    reactComment,
 	},
 }
 
 func reactPost(ctx *slow.Ctx) {
+	authAPI.Required(ctx)
+
 	rq := ctx.Request
 	rsp := ctx.Response
-
-	user := ctx.Global["user"].(*model.User)
+	user := ctx.Global["user"].(*models.User)
 	postID := rq.Args["postID"]
 	userID := rq.Args["userID"]
 
-	model.FindOr404(postID, "*model.Post", "owner = ?", userID)
+	models.FindOr404(postID, "*models.Post", "owner = ?", userID)
 
 	if ctx.Request.Method == "PUT" {
-		if user.UID() != userID {
+		if user.UID != userID {
 			rsp.BadRequest()
 		}
-		model.NewReact(postID, user.UID())
+		models.NewReact(postID, user.UID)
 	}
-	rs := []*model.React{}
+	rs := []*models.React{}
 	rsJson := []map[string]any{}
-	model.GetDB().Where("obj = ?", postID).Find(&rs)
+	models.Session().Where("obj = ?", postID).Find(&rs)
 	for _, r := range rs {
-		rsJson = append(rsJson, r.ToJson())
+		rsJson = append(rsJson, r.ToMap())
 	}
 	rsp.JSON(rsJson, 200)
 }
 
 func reactComment(ctx *slow.Ctx) {
+	authAPI.Required(ctx)
+
 	rq := ctx.Request
 	rsp := ctx.Response
 
-	user := ctx.Global["user"].(*model.User)
+	user := ctx.Global["user"].(*models.User)
 	postID := rq.Args["postID"]
 	commID := rq.Args["commID"]
 	userID := rq.Args["userID"]
 
-	model.FindOr404(commID, "*model.Comm", "owner = ? AND post = ?", userID, postID)
+	models.FindOr404(commID, "*models.Comm", "owner = ? AND post = ?", userID, postID)
 
 	if ctx.Request.Method == "PUT" {
-		if user.UID() != userID {
+		if user.UID != userID {
 			rsp.BadRequest()
 		}
-		model.NewReact(commID, user.UID())
+		models.NewReact(commID, user.UID)
 	}
-	rs := []model.React{}
+	rs := []models.React{}
 	rsJson := []map[string]any{}
-	model.GetDB().Where("obj = ?", commID).Find(&rs)
+	models.Session().Where("obj = ?", commID).Find(&rs)
 	for _, r := range rs {
-		rsJson = append(rsJson, r.ToJson())
+		rsJson = append(rsJson, r.ToMap())
 	}
 	rsp.JSON(rsJson, 200)
 }

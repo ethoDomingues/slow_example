@@ -1,4 +1,4 @@
-package model
+package models
 
 import (
 	"fmt"
@@ -9,6 +9,8 @@ import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
+
+var db *gorm.DB
 
 type Model struct {
 	ID        int `gorm:"primarykey"`
@@ -28,17 +30,19 @@ type DB struct {
 	Tables map[string]any
 }
 
-func GetDB() *DB {
-	db, err := gorm.Open(sqlite.Open("database.db"))
-
-	if err != nil {
-		panic(err)
+func Session() *DB {
+	var err error
+	if db == nil {
+		db, err = gorm.Open(sqlite.Open("database.db"))
+		if err != nil {
+			panic(err)
+		}
 	}
-	return &DB{DB: db}
+	return &DB{DB: db.Session(&gorm.Session{})}
 }
 
 func FindByID(id string, conds ...any) (obj any, found bool) {
-	var db = GetDB()
+	var db = Session()
 	_id := strings.Split(id, "@")
 	if len(_id) != 2 {
 		return nil, false

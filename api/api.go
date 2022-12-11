@@ -23,8 +23,12 @@ func Load() *slow.Router {
 	api.AddAll(solicitations.Routes...)
 
 	api.Cors = &slow.Cors{
-		AllowOrigin:  `*`,
-		AllowHeaders: []string{"Authorization", "Content-Type"},
+		AllowOrigin: `*`,
+		AllowHeaders: []string{
+			"Authorization",
+			"X-Session-Token",
+			"Content-Type"},
+		ExposeHeaders: []string{"Authorization", "X-Session-Token"},
 	}
 	return api
 }

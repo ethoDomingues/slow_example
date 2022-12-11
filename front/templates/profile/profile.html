@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,14 +9,16 @@
     <link rel="stylesheet" href="/assets/css/home/home.css">
     <link rel="stylesheet" href="/assets/css/posts/posts.css">
 
-    <script src="/assets/js/components/default.js"></script>
-    <script src="/assets/js/posts/posts.js"></script>
-    <script src="/assets/js/profile/profile.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" defer></script>
+    <script src="/assets/js/components/default.js" defer></script>
+    <script src="/assets/js/posts/posts.js" defer></script>
+    <script src="/assets/js/profile/profile.js" defer></script>
 </head>
+
 <body>
     <header id="header">
         <div><b onclick="location.href='/'">Slow Example</b></div>
-        <div><span onclick="logout()">Logout</span></div>
+        <div><span onclick="userLogout()">Logout</span></div>
     </header>
     <section id="content"></section>
     <nav id="navbar">
@@ -37,4 +40,5 @@
     </div>
     <footer></footer>
 </body>
+
 </html>
