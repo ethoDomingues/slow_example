@@ -1,17 +1,17 @@
 
 
 const fetchPosts = new Promise((resolve, reject) => {
-    let stkn = localStorage.getItem("xsession")
-    let tkn = localStorage.getItem("token")
-    if (stkn == null || tkn == null) {
-        reject("invalid/missing token")
+    let headers = {
+        "Authorization": localStorage.getItem("token"),
+        "Content-Type": "application/json"
+    }
+    let xs = localStorage.getItem("xsession");
+    if (xs) {
+        headers["X-Session-Token"]= xs
     }
     axios({
         url: `${HOSTAPI}/v1/posts`,
-        headers: {
-            "Authorization": tkn,
-            "X-Session-Token": stkn,
-        }
+        headers: headers,
     }).then(rsp => {
         if (rsp.status == 200) {
             let cttDiv = document.getElementById("content");
@@ -34,16 +34,18 @@ function deletePost(postID) {
     let postData = pElement.getAttribute("data");
     let post = JSON.parse(postData);
     if (post.owner.id == user) {
-        let token = localStorage.getItem("token");
-        let stkn = localStorage.getItem("xsession");
+        let headers = {
+            "Authorization": localStorage.getItem("token"),
+            "Content-Type": "application/json"
+        }
+        let xs = localStorage.getItem("xsession");
+        if (xs) {
+            headers["X-Session-Token"]= xs
+        }
         axios({
             url: `${HOSTAPI}/v1/users/${post.owner.id}/posts/${postID}`,
             method: "DELETE",
-            headers: {
-                "Authorization": token,
-                "X-Session-Token": stkn,
-
-            }
+            headers: headers,
         }).then(rsp => {
             if (rsp.status == 200 || rsp.status == 204) {
                 Array.from(document.getElementsByClassName(`posts-shared-content-${postID}`)).
@@ -63,16 +65,18 @@ function reactPost(postID) {
     let p = document.getElementById(postID);
     if (p != null) {
         let post = JSON.parse(p.getAttribute("data"));
-        let tkn = localStorage.getItem("token");
-        let stkn = localStorage.getItem("xsession");
+        let headers = {
+            "Authorization": localStorage.getItem("token"),
+            "Content-Type": "application/json"
+        }
+        let xs = localStorage.getItem("xsession");
+        if (xs) {
+            headers["X-Session-Token"]= xs
+        }
         axios({
             url: `${HOSTAPI}/v1/users/${post.owner.id}/posts/${post.id}/reacts`,
             method: "PUT",
-            headers: {
-                "Authorization": tkn,
-                "X-Session-Token": stkn,
-
-            }
+            headers: headers,
         }).then(resp => {
             if (resp.status == 200) {
                 return resp.data;
@@ -97,22 +101,26 @@ function pubNewPost(event) {
         let profile = document.getElementById("newpub-profile")
 
         let user = localStorage.getItem("userID");
-        let token = localStorage.getItem("token");
         let fd = new FormData();
-
         fd.set("text", text.value);
         fd.set("profile", profile.checked);
         Array.from(images.files).forEach((file) => {
             fd.append("images", file)
         });
 
+        let headers = {
+            "Authorization": localStorage.getItem("token"),
+            "Content-Type": "multipart/form-data",
+        }
+        let xs = localStorage.getItem("xsession");
+        if (xs) {
+            headers["X-Session-Token"]= xs
+        }
+
         axios({
             url: `${HOSTAPI}/v1/users/${user}/posts`,
             method: "POST",
-            headers: {
-                "Content-Type": "multipart/form-data",
-                "Authorization": token,
-            },
+            headers: headers,
             data: fd
         }).then(rsp => {
             if (rsp.status == 201) {
@@ -139,15 +147,18 @@ function pubNewPost(event) {
 
 function sharePost(postID) {
     let userID = localStorage.getItem("userID")
-    let token = localStorage.getItem("token")
-
+    let headers = {
+        "Authorization": localStorage.getItem("token"),
+        "Content-Type": "application/json"
+    }
+    let xs = localStorage.getItem("xsession");
+    if (xs) {
+        headers["X-Session-Token"]= xs
+    }
     axios({
         url: `${HOSTAPI}/v1/users/${userID}/posts`,
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": token,
-        },
+        headers: headers,
         data: { "shared": postID, text: "" }
     }).then(rsp => {
         if (rsp.status == 201) {

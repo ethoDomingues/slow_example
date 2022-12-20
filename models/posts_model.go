@@ -41,8 +41,9 @@ type Post struct {
 func (p *Post) UID() string { return "posts@" + fmt.Sprint(p.ID) }
 
 func (p *Post) GetOwner() *User {
-	owner, _ := FindByID(p.Owner)
-	return owner.(*User)
+	u := &User{}
+	Session().Find(u, "uid = ?", p.Owner)
+	return u
 }
 
 func (p *Post) GetShared() *Post {

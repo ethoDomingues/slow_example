@@ -55,13 +55,13 @@ func getCdn(ctx *slow.Ctx) {
 	filename := ctx.Request.Args["filename"]
 
 	cdn := models.FindOr404(id, "*models.Cdn", "filename = ?", filename).(*models.Cdn)
-	ctx.Response.Headers.Set("Content-Type", cdn.ContentType)
+	ctx.Response.Header.Set("Content-Type", cdn.ContentType)
 	ctx.Response.Body.Write(cdn.Blob)
 }
 
 func getCdnByID(ctx *slow.Ctx) {
 	id := ctx.Request.Args["id"]
 	cdn := models.FindOr404(id, "*models.Cdn").(*models.Cdn)
-	ctx.Response.Headers.Set("Content-Type", cdn.ContentType)
+	ctx.Response.Header.Set("Content-Type", cdn.ContentType)
 	ctx.Response.Body.Write(cdn.Blob)
 }

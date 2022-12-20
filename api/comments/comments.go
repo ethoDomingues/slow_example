@@ -77,13 +77,10 @@ func post(ctx *slow.Ctx) {
 
 func delete(ctx *slow.Ctx) {
 	authAPI.Required(ctx)
-
 	rq := ctx.Request
 	rsp := ctx.Response
-
 	user := ctx.Global["user"].(*models.User)
 	id := rq.Args["commID"]
-
 	if rq.Args["userID"] != user.UID {
 		rsp.BadRequest()
 	}

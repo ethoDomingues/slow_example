@@ -20,8 +20,8 @@ const getCurrentUser = new Promise((resolve, reject) => {
         let user = JSON.parse(u);
         resolve(user);
     }
-    let tkn = localStorage.getItem("token");
     let reloadReq = false;
+    let tkn = localStorage.getItem("token")
     if (!tkn) {
         let params = new Proxy(new URLSearchParams(window.location.search), {
             get: (searchParams, prop) => searchParams.get(prop),
@@ -33,12 +33,17 @@ const getCurrentUser = new Promise((resolve, reject) => {
         }
     }
     if (!tkn) { reject("missing token") }
+    let headers = {
+        "Authorization": tkn,
+        "Content-Type": "application/json"
+    }
+    let xs = localStorage.getItem("xsession");
+    if (xs) {
+        headers["X-Session-Token"] = xs;
+    }
     axios({
         url: `${HOSTAPI}/v1/users/whoami`,
-        headers: {
-            "Authorization": tkn,
-            "Content-Type": "application/json"
-        }
+        headers: headers
     }).then(rsp => {
         if (rsp.status == 401 || rsp.status == 404) {
             logout();
@@ -47,8 +52,10 @@ const getCurrentUser = new Promise((resolve, reject) => {
             let user = rsp.data;
             localStorage.setItem("userID", user.id);
             localStorage.setItem("user", JSON.stringify(user));
-            localStorage.setItem("xsession", rsp.headers["x-session-token"]);
-
+            let xs = rsp.headers["x-session-token"];
+            if (xs) {
+                localStorage.setItem("xsession",xs);
+            }
             if (reloadReq) {
                 location.href = location.pathname;
             }

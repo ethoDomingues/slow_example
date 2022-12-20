@@ -6,14 +6,12 @@ replace github.com/ethodomingues/slow => ../../slow
 
 replace github.com/ethodomingues/authAPI => ../../authAPI
 
-replace github.com/ethodomingues/slow_example/api => ./api
+replace github.com/ethodomingues/slow_example/cdn => ../cdn
 
-replace github.com/ethodomingues/slow_example/cdn => ./cdn
+replace github.com/ethodomingues/slow_example/api => ../api
 
 require (
-	github.com/ethodomingues/authAPI v0.0.0-00010101000000-000000000000
 	github.com/ethodomingues/slow v0.0.0-00010101000000-000000000000
-	golang.org/x/crypto v0.4.0
 	gorm.io/driver/sqlite v1.4.3
 	gorm.io/gorm v1.24.2
 )

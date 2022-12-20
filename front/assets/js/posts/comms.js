@@ -6,21 +6,24 @@ function pubNewComm(postID) {
 
     if (text.value || image.files.length > 0) {
         let user = localStorage.getItem("userID");
-        let token = localStorage.getItem("token");
         let fd = new FormData();
-
         fd.set("text", text.value);
         if (image.files.length > 0) {
             fd.set("image", image.files[0]);
         }
 
+        let headers = {
+            "Authorization": localStorage.getItem("token"),
+            "Content-Type": "multipart/form-data"
+        }
+        let xs = localStorage.getItem("xsession");
+        if (xs) {
+            headers["X-Session-Token"]= xs
+        }
         axios({
             url: `${HOSTAPI}/v1/users/${user}/posts/${postID}/comments`,
             method: "POST",
-            headers: {
-                "Authorization": token,
-                "Content-Type": "multipart/form-data",
-            },
+            headers: headers,
             data: fd
         }).then(rsp => {
             if (rsp.status == 201) {
@@ -46,13 +49,18 @@ function deleteComm(commID) {
     let commData = cElement.getAttribute("data");
     let comm = JSON.parse(commData);
     if (comm.owner.id == user) {
-        let token = localStorage.getItem("token");
+        let headers = {
+            "Authorization": localStorage.getItem("token"),
+            "Content-Type": "application/json"
+        }
+        let xs = localStorage.getItem("xsession");
+        if (xs) {
+            headers["X-Session-Token"]= xs
+        }
         axios({
             url: `${HOSTAPI}/v1/users/${comm.post.owner.id}/posts/${comm.post.id}/comments/${commID}`,
             method: "DELETE",
-            headers: {
-                Authorization: token,
-            }
+            headers: headers,
         }).then(resp => {
             if (resp.status == 200 || resp.status == 204) {
                 cElement.remove();
@@ -66,12 +74,18 @@ function reactComm(commID) {
     if (c != null) {
         let comm = JSON.parse(c.getAttribute("data"));
         let tkn = localStorage.getItem("token");
+        let headers = {
+            "Authorization": tkn,
+            "Content-Type": "application/json"
+        }
+        let xs = localStorage.getItem("xsession");
+        if (xs) {
+            headers["X-Session-Token"]= xs
+        }
         axios({
             url: `${HOSTAPI}/v1/users/${comm.post.owner.id}/posts/${comm.post.id}/comments/${comm.id}/reacts`,
             method: "PUT",
-            headers: {
-                Authorization: tkn
-            }
+            headers: headers,
         }).then(rsp => {
             if (rsp.status == 200 || rsp.status == 201) {
                 let data = rsp.data;

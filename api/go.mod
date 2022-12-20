@@ -6,11 +6,9 @@ replace github.com/ethodomingues/slow => ../../slow
 
 replace github.com/ethodomingues/authAPI => ../../authAPI
 
-replace github.com/ethodomingues/slow_example => ../
+replace github.com/ethodomingues/slow_example/models => ../models
 
 replace github.com/ethodomingues/slow_example/cdn => ../cdn
-
-replace github.com/ethodomingues/slow_example/models => ../models
 
 require (
 	github.com/ethodomingues/authAPI v0.0.0-00010101000000-000000000000

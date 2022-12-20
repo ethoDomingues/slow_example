@@ -1,19 +1,23 @@
-window.addEventListener("DOMCotentLoaded", () => {
-    let token = localStorage.getItem("token");
-    getCurrentUser(token);
-    fetchPostsProfile();
+window.addEventListener("DOMContentLoaded", () => {
+    getCurrentUser.then(() => {
+        fetchPostsProfile();
+    });
 })
 
 function fetchPostsProfile() {
     let userID = localStorage.getItem("userID")
-    let token = localStorage.getItem("token")
+    let headers = {
+        "Authorization": localStorage.getItem("token"),
+        "Content-Type": "application/json"
+    }
+    let xs = localStorage.getItem("xsession");
+    if (xs) {
+        headers["X-Session-Token"]= xs
+    }
     axios({
         url: `${HOSTAPI}/v1/users/${userID}/posts`,
         method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: token,
-        }
+        headers: headers
     }).then(rsp => {
         if (rsp.status == 200) {
             rsp.data.forEach(post => {

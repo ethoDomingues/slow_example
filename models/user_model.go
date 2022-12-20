@@ -1,12 +1,15 @@
 package models
 
 import (
-	"github.com/ethodomingues/authAPI"
 	"github.com/ethodomingues/slow"
 )
 
 type User struct {
-	authAPI.User
+	Model
+
+	Name,
+	Email,
+	UID string
 }
 
 func (u *User) GetProfile() *Profile {
@@ -16,6 +19,34 @@ func (u *User) GetProfile() *Profile {
 		return &p
 	}
 	return nil
+}
+
+func (u *User) RequestSolicitations(rq *slow.Request) map[string]any {
+	db := Session()
+	req := map[string]any{}
+	sols := []Solicitation{}
+
+	db.Where("req = ?", u.UID, u.UID).Find(&sols)
+	for _, sol := range sols {
+		_user, _ := FindByID(sol.Rec)
+		user := _user.(*User)
+		req[user.UID] = user.ToMap(rq)
+	}
+	return req
+}
+
+func (u *User) ReceivedSolicitations(rq *slow.Request) map[string]any {
+	db := Session()
+	rec := map[string]any{}
+	sols := []Solicitation{}
+
+	db.Where("rec = ?", u.UID, u.UID).Find(&sols)
+	for _, sol := range sols {
+		_user, _ := FindByID(sol.Req)
+		user := _user.(*User)
+		rec[user.UID] = user.ToMap(rq)
+	}
+	return rec
 }
 
 func (u *User) ToMap(rq *slow.Request) map[string]any {

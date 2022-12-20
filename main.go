@@ -15,7 +15,7 @@ import (
 func main() {
 	app := slow.NewApp()
 	app.SecretKey = "secret From Environment Variables" // Security: get from 'Environment Variables' => os.Getenv("SECRETKEY")
-	app.Servername = "boatchazul.com.br"
+	app.Servername = "localhost:5000"
 	app.TemplateFolder = "front/templates/" // the default is '/template', but ...
 	app.StaticFolder = "front/assets/"      // the default is '/assets', but ...
 	app.BeforeRequest = beforeRequest
@@ -31,8 +31,9 @@ func main() {
 		&models.React{},
 		&models.Comm{},
 		&models.Post{},
+		&models.Solicitation{},
 	)
-	app.Listen(":80")
+	app.Listen(":5000")
 }
 
 func home(ctx *slow.Ctx) {
