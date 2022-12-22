@@ -42,7 +42,7 @@ func home(ctx *slow.Ctx) {
 
 func beforeRequest(ctx *slow.Ctx) {
 	authAPI.GetCurrentUser(ctx)
-	fmt.Println(ctx.Global["userID"])
+	fmt.Println(ctx.Global)
 	fmt.Println(ctx.Request.Header)
 	if u, ok := ctx.Global["userID"]; ok {
 		db := models.Session()
