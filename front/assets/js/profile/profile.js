@@ -15,7 +15,7 @@ function fetchPostsProfile() {
         headers["X-Session-Token"]= xs
     }
     axios({
-        url: `${HOSTAPI}/v1/users/${userID}/posts`,
+        url: `${HOSTApi}/v1/users/${userID}/posts`,
         method: "GET",
         headers: headers
     }).then(rsp => {

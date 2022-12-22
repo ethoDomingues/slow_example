@@ -2,14 +2,14 @@
 function logout() {
     localStorage.clear();
     let n = btoa(location.href);
-    location.href = `${HOSTAUTH}/v1/auth?next=${n}`;
+    location.href = `${HOSTAuth}/v1/auth?next=${n}`;
     return;
 }
 
 function userLogout() {
     if (confirm("Deseja realmente sair?")) {
         localStorage.clear();
-        location.href = `${HOSTAUTH}/v1/auth`;
+        location.href = `${HOSTAuth}/v1/auth`;
     }
     return;
 }
@@ -42,7 +42,7 @@ const getCurrentUser = new Promise((resolve, reject) => {
         headers["X-Session-Token"] = xs;
     }
     axios({
-        url: `${HOSTAPI}/v1/users/whoami`,
+        url: `${HOSTApi}/v1/users/whoami`,
         headers: headers
     }).then(rsp => {
         if (rsp.status == 401 || rsp.status == 404) {
@@ -57,6 +57,7 @@ const getCurrentUser = new Promise((resolve, reject) => {
                 localStorage.setItem("xsession",xs);
             }
             if (reloadReq) {
+                console.log(location.pathname)
                 location.href = location.pathname;
             }
             resolve(user);

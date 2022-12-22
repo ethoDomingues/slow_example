@@ -10,7 +10,7 @@ const fetchPosts = new Promise((resolve, reject) => {
         headers["X-Session-Token"]= xs
     }
     axios({
-        url: `${HOSTAPI}/v1/posts`,
+        url: `${HOSTApi}/v1/posts`,
         headers: headers,
     }).then(rsp => {
         if (rsp.status == 200) {
@@ -43,7 +43,7 @@ function deletePost(postID) {
             headers["X-Session-Token"]= xs
         }
         axios({
-            url: `${HOSTAPI}/v1/users/${post.owner.id}/posts/${postID}`,
+            url: `${HOSTApi}/v1/users/${post.owner.id}/posts/${postID}`,
             method: "DELETE",
             headers: headers,
         }).then(rsp => {
@@ -74,7 +74,7 @@ function reactPost(postID) {
             headers["X-Session-Token"]= xs
         }
         axios({
-            url: `${HOSTAPI}/v1/users/${post.owner.id}/posts/${post.id}/reacts`,
+            url: `${HOSTApi}/v1/users/${post.owner.id}/posts/${post.id}/reacts`,
             method: "PUT",
             headers: headers,
         }).then(resp => {
@@ -118,7 +118,7 @@ function pubNewPost(event) {
         }
 
         axios({
-            url: `${HOSTAPI}/v1/users/${user}/posts`,
+            url: `${HOSTApi}/v1/users/${user}/posts`,
             method: "POST",
             headers: headers,
             data: fd
@@ -156,7 +156,7 @@ function sharePost(postID) {
         headers["X-Session-Token"]= xs
     }
     axios({
-        url: `${HOSTAPI}/v1/users/${userID}/posts`,
+        url: `${HOSTApi}/v1/users/${userID}/posts`,
         method: "POST",
         headers: headers,
         data: { "shared": postID, text: "" }

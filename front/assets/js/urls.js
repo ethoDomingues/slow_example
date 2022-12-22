@@ -1,12 +1,6 @@
+var schema = location.protocol;
 
-var schema = "http://"
-var port =":5443"
-if (location.protocol == "https:") {
-    schema = "https://"
-    port = ""
-}
-
-const HOST = "boatchazul.com.br"
-const HOSTCDN = `${schema}cdn.${HOST}`
-const HOSTAPI = `${schema}api.${HOST}`
-const HOSTAUTH = `${schema}auth.${HOST}${port}`
+const HOST = `${schema}//boatchazul.com.br`;
+const HOSTCdn = `${schema}//cdn.boatchazul.com.br`;
+const HOSTApi = `${schema}//api.boatchazul.com.br`;
+const HOSTAuth = `${schema}//auth.boatchazul.com.br`;

@@ -15,12 +15,7 @@ func whoami(ctx *slow.Ctx) {
 	authAPI.Required(ctx)
 	if u, ok := ctx.Global["user"]; ok {
 		user := u.(*models.User)
-		data := map[string]any{
-			"user":          user.ToMap(ctx.Request),
-			"friends":       nil,
-			"solicitations": nil,
-		}
-		ctx.Response.JSON(data, 200)
+		ctx.Response.JSON(user.ToMap(ctx.Request), 200)
 	}
 	ctx.Response.Redirect("http://auth.boatchazul.com.br/v1/auth")
 }

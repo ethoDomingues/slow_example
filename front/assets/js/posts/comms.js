@@ -21,7 +21,7 @@ function pubNewComm(postID) {
             headers["X-Session-Token"]= xs
         }
         axios({
-            url: `${HOSTAPI}/v1/users/${user}/posts/${postID}/comments`,
+            url: `${HOSTApi}/v1/users/${user}/posts/${postID}/comments`,
             method: "POST",
             headers: headers,
             data: fd
@@ -58,7 +58,7 @@ function deleteComm(commID) {
             headers["X-Session-Token"]= xs
         }
         axios({
-            url: `${HOSTAPI}/v1/users/${comm.post.owner.id}/posts/${comm.post.id}/comments/${commID}`,
+            url: `${HOSTApi}/v1/users/${comm.post.owner.id}/posts/${comm.post.id}/comments/${commID}`,
             method: "DELETE",
             headers: headers,
         }).then(resp => {
@@ -83,7 +83,7 @@ function reactComm(commID) {
             headers["X-Session-Token"]= xs
         }
         axios({
-            url: `${HOSTAPI}/v1/users/${comm.post.owner.id}/posts/${comm.post.id}/comments/${comm.id}/reacts`,
+            url: `${HOSTApi}/v1/users/${comm.post.owner.id}/posts/${comm.post.id}/comments/${comm.id}/reacts`,
             method: "PUT",
             headers: headers,
         }).then(rsp => {
@@ -92,7 +92,7 @@ function reactComm(commID) {
                 let reactSpan = c.getElementsByClassName("comments-footer-reacts")[0];
                 reactSpan.getElementsByTagName("span")[0].textContent = data.length;
             }
-        }).catch(err => {
+        }).catch(() => {
             alert("Desculpe, algo deu errado... :(")
         })
     }

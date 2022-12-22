@@ -8,17 +8,14 @@ import (
 	"github.com/ethodomingues/slow_example/models"
 )
 
-// func main() {
-// 	GetApp().Listen()
-// }
-
 func main() {
 	app := slow.NewApp()
 	app.SecretKey = "secret From Environment Variables" // Security: get from 'Environment Variables' => os.Getenv("SECRETKEY")
-	app.Servername = "localhost:5000"
+	app.Servername = "boatchazul.com.br"
 	app.TemplateFolder = "front/templates/" // the default is '/template', but ...
 	app.StaticFolder = "front/assets/"      // the default is '/assets', but ...
 	app.BeforeRequest = beforeRequest
+
 	app.GET("/", home)
 
 	app.Mount(api.Load())
@@ -60,6 +57,5 @@ func beforeRequest(ctx *slow.Ctx) {
 			}
 		}
 		ctx.Global["user"] = user
-
 	}
 }
