@@ -14,7 +14,9 @@ func main() {
 	app.Servername = "boatchazul.com.br"
 	app.TemplateFolder = "front/templates/" // the default is '/template', but ...
 	app.StaticFolder = "front/assets/"      // the default is '/assets', but ...
+
 	app.BeforeRequest = beforeRequest
+	app.ListeningInTLS = true
 
 	app.GET("/", home)
 
