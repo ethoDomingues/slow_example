@@ -54,7 +54,7 @@ const getCurrentUser = new Promise((resolve, reject) => {
             localStorage.setItem("user", JSON.stringify(user));
             let xs = rsp.headers["x-session-token"];
             if (xs) {
-                localStorage.setItem("xsession",xs);
+                localStorage.setItem("xsession", xs);
             }
             if (reloadReq) {
                 console.log(location.pathname)
@@ -62,8 +62,7 @@ const getCurrentUser = new Promise((resolve, reject) => {
             }
             resolve(user);
         }
-        console.log(rsp.data)
-        // reject("without user")
+        reject("without user")
     }).catch(err => {
         reject(err)
     });
