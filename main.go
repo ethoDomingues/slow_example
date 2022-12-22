@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/ethodomingues/authAPI"
 	"github.com/ethodomingues/slow"
 	"github.com/ethodomingues/slow_example/api"
@@ -40,6 +42,8 @@ func home(ctx *slow.Ctx) {
 
 func beforeRequest(ctx *slow.Ctx) {
 	authAPI.GetCurrentUser(ctx)
+	fmt.Println(ctx.Global["userID"])
+	fmt.Println(ctx.Request.Header)
 	if u, ok := ctx.Global["userID"]; ok {
 		db := models.Session()
 		user := &models.User{}
