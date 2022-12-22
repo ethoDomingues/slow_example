@@ -60,7 +60,8 @@ const getCurrentUser = new Promise((resolve, reject) => {
                 console.log(location.pathname)
                 location.href = location.pathname;
             }
-            resolve(user);
+            console.log(rsp.data)
+            // resolve(user);
         }
         reject("without user")
     }).catch(err => {
