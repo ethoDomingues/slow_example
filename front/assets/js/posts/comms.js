@@ -10,7 +10,8 @@ function pubNewComm(postID) {
 
         let pStr = pElement.getAttribute("data");
         let pJson = JSON.parse(pStr);
-        console.log(pJson.owner.id)
+        let userID = pJson.owner.id
+
         fd.set("text", text.value);
         if (image.files.length > 0) {
             fd.set("image", image.files[0]);
@@ -25,7 +26,7 @@ function pubNewComm(postID) {
             headers["X-Session-Token"]= xs
         }
         axios({
-            url: `${HOSTApi}/v1/users/${user}/posts/${postID}/comments`,
+            url: `${HOSTApi}/v1/users/${userID}/posts/${postID}/comments`,
             method: "POST",
             headers: headers,
             data: fd

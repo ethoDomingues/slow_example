@@ -64,9 +64,7 @@ func post(ctx *slow.Ctx) {
 	if (postID == "") || (text == "" && len(image) < 1) {
 		rsp.BadRequest()
 	}
-	fmt.Println("b")
 	models.FindOr404(postID, "*models.Post", "owner = ?", userID)
-	fmt.Println("a")
 
 	if len(image) > 0 {
 		img = image[0]
