@@ -31,16 +31,20 @@ func reactPost(ctx *slow.Ctx) {
 	userID := rq.Args["userID"]
 
 	models.FindOr404(postID, "*models.Post", "owner = ?", userID)
-
+	db := models.Session()
 	if ctx.Request.Method == "PUT" {
-		if user.UID != userID {
-			rsp.BadRequest()
+		r := &models.React{}
+
+		db.Find(r, "owner = ? AND obj = ?", userID, postID)
+		if r.ID > 0 {
+			db.Delete(r)
+		} else {
+			models.NewReact(postID, user.UID)
 		}
-		models.NewReact(postID, user.UID)
 	}
 	rs := []*models.React{}
 	rsJson := []map[string]any{}
-	models.Session().Where("obj = ?", postID).Find(&rs)
+	db.Where("obj = ?", postID).Find(&rs)
 	for _, r := range rs {
 		rsJson = append(rsJson, r.ToMap())
 	}
