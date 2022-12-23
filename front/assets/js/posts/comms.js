@@ -7,6 +7,10 @@ function pubNewComm(postID) {
     if (text.value || image.files.length > 0) {
         let user = localStorage.getItem("userID");
         let fd = new FormData();
+
+        let pStr = pElement.getAttribute("data");
+        let pJson = JSON.parse(pStr);
+        console.log(pJson.owner.id)
         fd.set("text", text.value);
         if (image.files.length > 0) {
             fd.set("image", image.files[0]);
