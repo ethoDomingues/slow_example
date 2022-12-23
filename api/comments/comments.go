@@ -51,8 +51,8 @@ func post(ctx *slow.Ctx) {
 	rq := ctx.Request
 	rsp := ctx.Response
 	cUser := ctx.Global["user"].(*models.User)
-	user := rq.Args["userID"]
-	post := rq.Args["postID"]
+	userID := rq.Args["userID"]
+	postID := rq.Args["postID"]
 
 	var img *slow.File
 	text, ok := rq.Form["text"].(string)
@@ -61,16 +61,17 @@ func post(ctx *slow.Ctx) {
 	}
 
 	image := rq.Files["image"]
-	if (post == "") || (text == "" && len(image) < 1) {
+	if (postID == "") || (text == "" && len(image) < 1) {
 		rsp.BadRequest()
 	}
-
-	models.FindOr404(post, "*models.Post", "owner = ?", user)
+	fmt.Println("b")
+	models.FindOr404(postID, "*models.Post", "owner = ?", userID)
+	fmt.Println("a")
 
 	if len(image) > 0 {
 		img = image[0]
 	}
-	comm := models.NewComm(text, fmt.Sprint(cUser.UID), post, img)
+	comm := models.NewComm(text, fmt.Sprint(cUser.UID), postID, img)
 
 	rsp.JSON(comm.ToMap(rq), 201)
 }
