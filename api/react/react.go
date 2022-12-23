@@ -64,15 +64,20 @@ func reactComment(ctx *slow.Ctx) {
 
 	models.FindOr404(commID, "*models.Comm", "owner = ? AND post = ?", userID, postID)
 
+	db := models.Session()
 	if ctx.Request.Method == "PUT" {
-		if user.UID != userID {
-			rsp.BadRequest()
+		r := &models.React{}
+
+		db.Find(r, "owner = ? AND obj = ?", userID, postID)
+		if r.ID > 0 {
+			db.Delete(r)
+		} else {
+			models.NewReact(postID, user.UID)
 		}
-		models.NewReact(commID, user.UID)
 	}
 	rs := []models.React{}
 	rsJson := []map[string]any{}
-	models.Session().Where("obj = ?", commID).Find(&rs)
+	db.Where("obj = ?", commID).Find(&rs)
 	for _, r := range rs {
 		rsJson = append(rsJson, r.ToMap())
 	}

@@ -5,7 +5,6 @@ function pubNewComm(postID) {
     let image = pElement.getElementsByClassName("comments-form-image")[0];
 
     if (text.value || image.files.length > 0) {
-        let user = localStorage.getItem("userID");
         let fd = new FormData();
 
         let pStr = pElement.getAttribute("data");
