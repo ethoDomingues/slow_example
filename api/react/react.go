@@ -62,17 +62,17 @@ func reactComment(ctx *slow.Ctx) {
 	commID := rq.Args["commID"]
 	userID := rq.Args["userID"]
 
-	models.FindOr404(commID, "*models.Comm", "owner = ? AND post = ?", userID, postID)
+	models.FindOr404(postID, "*models.Post", "owner = ?", userID)
+	models.FindOr404(commID, "*models.Comm", "post = ?", postID)
 
 	db := models.Session()
 	if ctx.Request.Method == "PUT" {
 		r := &models.React{}
-
-		db.Find(r, "owner = ? AND obj = ?", userID, postID)
+		db.Find(r, "owner = ? AND obj = ?", user.UID, commID)
 		if r.ID > 0 {
 			db.Delete(r)
 		} else {
-			models.NewReact(postID, user.UID)
+			models.NewReact(commID, user.UID)
 		}
 	}
 	rs := []models.React{}
